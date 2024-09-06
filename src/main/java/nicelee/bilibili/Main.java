@@ -41,7 +41,8 @@ public class Main {
 //				args = new String[] { "debug=true&check=true&liver=acfun&id=36626547" };
 //				args = new String[]{"debug=true&liver=douyin&id=54997291096&delete=false&check=false"};  			// 清晰度全部可选，需要跳过验证的cookie
 //				args = new String[]{"debug=true&liver=douyin2&id=443897108352&delete=false&check=false"};  			// 清晰度全部可选，需要跳过验证的cookie
-//				args = new String[]{"debug=true&liver=douyin2&id=814607739589&delete=false&check=false"};  			// 清晰度全部可选，需要跳过验证的cookie
+//				args = new String[]{"debug=true&liver=douy
+//				in2&id=814607739589&delete=false&check=false"};  			// 清晰度全部可选，需要跳过验证的cookie
 				args = new String[]{"debug=true&liver=bili&id=22621571&qn=-1&delete=false&check=false"};  			// 清晰度全部可选，需要跳过验证的cookie
 
 		final Plugin plugin = new Plugin();

@@ -101,8 +101,9 @@ public class Main {
 						break;
 					}
 				}
-				if (findQn)
-					break;
+				if (findQn) {
+                    break;
+                }
 			}
 		}
 		// qn = -1, 使用最高画质

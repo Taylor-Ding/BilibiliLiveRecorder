@@ -1,35 +1,51 @@
-name: Merge-upstream
+name: Upstream Sync
+
+permissions:
+  contents: write
 
 on:
-  push:
-    branches: 
-      - master
   schedule:
-    - cron: 0 0 * * *
+    - cron: "0 0 * * *"  # every day
+  workflow_dispatch:
 
 jobs:
-  merge:
-
+  sync_latest_from_upstream:
+    name: Sync latest commits from upstream repo
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.repository.fork }}
+    
     steps:
-
-    - name: Checkout
-      uses: actions/checkout@master
-      with:
-        ref: master
-        fetch-depth: 0
-        lfs: true
-
-    - name: Set git identity
-      run : |
-        git config --global user.email "zhujinwei0001@gmail.com"
-        git config --global user.name "Taylor Ding"
-        git config pull.rebase true 
-    - name: Load upstream commits
-      run: git pull https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder.git --no-edit --strategy-option ours
-
-    # - name: Push Commits
-    #   env:
-    #     DOWNSTREAM_BRANCH: master
-    #   run: git push origin $DOWNSTREAM_BRANCH
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+      - name: Add upstream repository and fetch
+        run: |
+          git remote add upstream https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder.git
+          git fetch upstream master
+          
+      - name: Merge upstream
+        run: |
+          # 存储当前分支的改动
+          git stash push .github/workflows/sync.yml || true
+          
+          # 尝试合并上游更改
+          git merge upstream/master --no-edit || true
+          
+          # 恢复工作流文件
+          git stash pop || true
+          
+          # 添加更改并提交
+          git add .
+          git commit -m "Merge upstream changes while preserving workflow" || echo "No changes to commit"
+          
+      - name: Push changes
+        run: |
+          git push origin master
